@@ -47,6 +47,7 @@ dependencies:
   provider: ^6.1.2
   brasil_fields: ^1.14.3
   money_input_formatter: ^2.0.0
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:

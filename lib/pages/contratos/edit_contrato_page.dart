@@ -14,8 +14,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EditContratoPage extends StatefulWidget {
   final Contrato contratoModel;
-  //final idContrato;
-  EditContratoPage({Key? key, required this.contratoModel});
+  String nomeCasa;
+  String nomeCliente;
+
+  EditContratoPage(
+      {Key? key,
+      required this.contratoModel,
+      required this.nomeCasa,
+      required this.nomeCliente});
 
   @override
   State<EditContratoPage> createState() => _EditContratoPageState();
@@ -34,16 +40,15 @@ class _EditContratoPageState extends State<EditContratoPage> {
   final UserServices _userServices = UserServices();
   final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
   final Dialogs _dialogs = Dialogs();
+  String nomeCasa = '';
+  String nomeCliente = '';
 
   late List<String> _names = [];
 
   @override
   void initState() {
-    //loadDataFromFirebase(idContrato);
-    //idContrato = widget.idContrato;
     super.initState();
 
-    //Contrato contratoModel = Contrato();
     carregar(widget.contratoModel);
   }
 
@@ -55,21 +60,11 @@ class _EditContratoPageState extends State<EditContratoPage> {
     _dtVencimento.text = contratoModel.dtVencimento!;
   }
 
-  // void loadDataFromFirebase(String idContrato) async {
-  //   final DocumentSnapshot doc = await FirebaseFirestore.instance
-  //       .collection('contrato')
-  //       .doc(idContrato)
-  //       .get();
-  //   final data = doc.data() as Map<String, dynamic>;
-  //   _dtInicioContrato.text = data['dtInicioContrato'];
-  //   _dtFinalContrato.text = data['dtFinalContrato'];
-  //   _tempoContrato.text = data['tempoContrato'];
-  //   _valorContrato.text = data['valorMensal'];
-  //   _dtVencimento.text = data['dtVencimento'];
-  // }
-
   @override
   Widget build(BuildContext context) {
+    String nomeCasa = widget.nomeCasa;
+    String nomeCliente = widget.nomeCliente;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Contrato"),
@@ -82,82 +77,81 @@ class _EditContratoPageState extends State<EditContratoPage> {
               height: 15,
             ),
 
-            const Center(
-              child: Text(
-                "Selecione o inquilino",
-              ),
+            Center(
+              child: Text('Cliente: $nomeCliente'),
             ),
 
-            FutureBuilder<List<String>>(
-              future: _userServices.loadNamesFromFirebase()
-                  as Future<List<String>>?,
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-                if (snapshot.hasError) {
-                  return const Text('Erro ao carregar os nomes');
-                }
+            // FutureBuilder<List<String>>(
+            //   future: _userServices.loadNamesFromFirebase()
+            //       as Future<List<String>>?,
+            //   builder:
+            //       (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+            //     if (snapshot.hasError) {
+            //       return const Text('Erro ao carregar os nomes');
+            //     }
 
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return DropdownButton<String>(
-                    alignment: Alignment.bottomCenter,
-                    borderRadius: BorderRadius.circular(10),
-                    value: _userServices.selectedCliente,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _userServices.selectedCliente = newValue!;
-                      });
-                    },
-                    items: snapshot.data!.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  );
-                }
+            //     if (snapshot.connectionState == ConnectionState.done) {
+            //       return DropdownButton<String>(
+            //         alignment: Alignment.bottomCenter,
+            //         borderRadius: BorderRadius.circular(10),
+            //         value: _userServices.selectedCliente,
+            //         onChanged: (String? newValue) {
+            //           setState(() {
+            //             _userServices.selectedCliente = newValue!;
+            //           });
+            //         },
+            //         items: snapshot.data!.map((String value) {
+            //           return DropdownMenuItem<String>(
+            //             value: value,
+            //             child: Text(value),
+            //           );
+            //         }).toList(),
+            //       );
+            //     }
 
-                return const CircularProgressIndicator();
-              },
-            ),
+            //     return const CircularProgressIndicator();
+            //   },
+            // ),
+
             //------------------------------------------------------------------
 
-            const Center(
+            Center(
               child: Text(
-                "Selecione a casa",
+                'Casa: $nomeCasa',
               ),
             ),
 
-            FutureBuilder<List<String>>(
-              future: _casaServices.loadNamesFromFirebase()
-                  as Future<List<String>>?,
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-                if (snapshot.hasError) {
-                  return const Text('Erro ao carregar os nomes');
-                }
+            // FutureBuilder<List<String>>(
+            //   future: _casaServices.loadNamesFromFirebase()
+            //       as Future<List<String>>?,
+            //   builder:
+            //       (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+            //     if (snapshot.hasError) {
+            //       return const Text('Erro ao carregar os nomes');
+            //     }
 
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return DropdownButton<String>(
-                    alignment: Alignment.bottomCenter,
-                    borderRadius: BorderRadius.circular(10),
-                    value: _casaServices.selectedCasa,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _casaServices.selectedCasa = newValue!;
-                      });
-                    },
-                    items: snapshot.data!.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  );
-                }
+            //     if (snapshot.connectionState == ConnectionState.done) {
+            //       return DropdownButton<String>(
+            //         alignment: Alignment.bottomCenter,
+            //         borderRadius: BorderRadius.circular(10),
+            //         value: _casaServices.selectedCasa,
+            //         onChanged: (String? newValue) {
+            //           setState(() {
+            //             _casaServices.selectedCasa = newValue!;
+            //           });
+            //         },
+            //         items: snapshot.data!.map((String value) {
+            //           return DropdownMenuItem<String>(
+            //             value: value,
+            //             child: Text(value),
+            //           );
+            //         }).toList(),
+            //       );
+            //     }
 
-                return const CircularProgressIndicator();
-              },
-            ),
+            //     return const CircularProgressIndicator();
+            //   },
+            // ),
 
             //------------------------------------------------------------------
             SizedBox(height: 30),
@@ -236,20 +230,20 @@ class _EditContratoPageState extends State<EditContratoPage> {
                       shape: LinearBorder.bottom(),
                     ),
                     onPressed: () async {
-                      if (await _contratoServices.cadastrarContrato(
-                        _userServices.selectedCliente,
-                        _casaServices.selectedCasa,
+                      if (await _contratoServices.atualizarContrato(
+                        widget.contratoModel.id!,
+                        widget.contratoModel.cpfCliente!,
+                        widget.contratoModel.idCasa!,
                         _dtInicioContrato.text,
                         _dtFinalContrato.text,
                         _tempoContrato.text,
                         _valorContrato.text,
                         _dtVencimento.text,
                       )) {
-                        // ignore: use_build_context_synchronously
-                        _dialogs.showSuccessDialog(
-                            context, 'atualizado com sucesso!');
+                        // _dialogs.showSuccessDialog(
+                        //     context, 'atualizado com sucesso!');
+
                         Navigator.of(context).pop();
-                        //_dtVencimento.clear();
                       } else {
                         // ignore: use_build_context_synchronously
                         _dialogs.showErrorDialog(

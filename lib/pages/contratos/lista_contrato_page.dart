@@ -13,21 +13,62 @@ ContratoServices _contratoServices = ContratoServices();
 Dialogs _dialogsService = Dialogs();
 
 class ListaContrato extends StatefulWidget {
-  const ListaContrato({super.key});
+  ListaContrato({super.key});
 
   @override
   State<ListaContrato> createState() => _ListaContratoState();
 }
 
 class _ListaContratoState extends State<ListaContrato> {
+  List<Contrato> contratos = [];
+  List<Map<String, dynamic>> listagemContrato = [];
   @override
   void didUpdateWidget(covariant ListaContrato oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
 
+  Future<String> getCasaNome(String idCasa) async {
+    String nomeCasa = await _contratoServices.getCasaNome(idCasa);
+    return nomeCasa;
+  }
+
+  Future<String> getClienteNome(String cpfCliente) async {
+    String nomeCliente = await _contratoServices.getClienteNome(cpfCliente);
+    return nomeCliente;
+  }
+
+  Future<List<Map<String, dynamic>>> getAllContratos() async {
+    contratos = await _contratoServices.allContratos();
+    for (final contrato in contratos) {
+      String nomeCasa = await getCasaNome(contrato.idCasa!);
+      String nomeCliente = await getClienteNome(contrato.cpfCliente!);
+      listagemContrato.add({
+        'id': contrato.id,
+        'cpfCliente': contrato.cpfCliente,
+        'idCasa': contrato.idCasa,
+        'nomeCasa': nomeCasa,
+        'nomeCliente': nomeCliente,
+        'valorMensal': contrato.valorMensal,
+        'dtInicioContrato': contrato.dtInicioContrato,
+        'dtFinalContrato': contrato.dtFinalContrato,
+        'tempoContrato': contrato.tempoContrato,
+        'dtVencimento': contrato.dtVencimento,
+      });
+    }
+    // debugPrint('listagem --> $listagemContrato');
+    return listagemContrato;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     return Scaffold(
         appBar: AppBar(
           title: const Text("Contratos"),
@@ -44,118 +85,161 @@ class _ListaContratoState extends State<ListaContrato> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              FutureBuilder<List<Contrato>>(
-                future: _contratoServices.allContratos(),
+              FutureBuilder(
+                future: getAllContratos(), // _contratoServices.allContratos(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return const Text('Something went wrong');
                   }
-                  if (snapshot.data == null) {
+                  if (!snapshot.hasData) {
                     return const Text('Sem dados cadastrados');
                   }
-
-                  if (snapshot.data != null) {
+                  if (snapshot.hasData) {
+                    List<Map<String, dynamic>> contratoMap = snapshot.data!;
                     return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        // Acessa os campos casa e cliente e fornece um valor padrão caso sejam nulos
+                        shrinkWrap: true,
+                        itemCount: contratoMap.length,
+                        itemBuilder: (context, index) {
+                          var keysList = contratoMap[index].keys.toList();
 
-          
-                          final nomeCasa = casaCollection
-                              .doc(snapshot.data![index].idCasa)
-                              .get()
-                              .then((query) => query['nome'].toString());
-                        
+                          // Acessa os campos casa e cliente e fornece um valor padrão caso sejam nulos
+                          debugPrint(
+                              'Future Builder -> casa ${contratoMap[index]['cpfCliente']}');
 
-                        //_contratoServices.getCasaNome(snapshot.data![index].idCasa ?? 'No data');
+                          final dtInicioContrato =
+                              contratoMap[index]['dtInicioContrato'];
+                          final dtFinalContrato =
+                              contratoMap[index]['dtFinalContrato'];
 
-                        // final cliente = _contratoServices.getClienteNome(
-                        //     snapshot.data![index].cpfCliente ?? 'No data');
-                        // snapshot.data![index].cliente ?? 'No data';
-                        final id = snapshot.data![index].id;
-                        final dtInicioContrato =
-                            snapshot.data![index].dtInicioContrato;
-                        final dtFinalContrato =
-                            snapshot.data![index].dtFinalContrato;
-
-                        return Row (
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              children: [
-                                Text(nomeCasa as String),
-                                // Text(cliente.toString()),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text(dtInicioContrato!),
-                                Text(dtFinalContrato!),
-                              ],
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EditContratoPage(
+                          return Column(
+                            children: [
+                              SizedBox(
+                                height: 10,
+                                width: double.infinity,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                          width: 1.0, color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Text(contratoMap[index]['nomeCliente']),
+                                      Text(contratoMap[index]['nomeCasa']),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text('Inicio - ' + dtInicioContrato),
+                                      Text('Final - ' + dtFinalContrato),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditContratoPage(
                                             contratoModel:
-                                                snapshot.data![index],
-                                          )),
-                                );
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text('Deletar Contrato'),
-                                      content: const Text(
-                                          'Deseja realmente Deletar o contrato?'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            // Fechar o diálogo quando o botão "Cancelar" for pressionado
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text('Cancelar'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            //Navigator.of(context).pop();
-                                            await _contratoServices
-                                                .deleteContrato(
-                                                    snapshot.data![index].id ??
-                                                        '',
-                                                    snapshot.data![index]
-                                                            .idCasa ??
-                                                        '');
 
-                                            Navigator.of(context).pop();
+                                                // snapshot.data![index],
 
-                                            _dialogsService.showSuccessDialog(
-                                              context,
-                                              'item apagado com sucesso',
-                                            );
-                                            setState(() {});
-                                          },
-                                          child: const Text('Excluir'),
+                                                Contrato(
+                                              cpfCliente: contratoMap[index]
+                                                  ['cpfCliente'],
+                                              dtFinalContrato:
+                                                  contratoMap[index]
+                                                      ['dtFinalContrato'],
+                                              dtInicioContrato:
+                                                  contratoMap[index]
+                                                      ['dtInicioContrato'],
+                                              id: contratoMap[index]['id'],
+                                              idCasa: contratoMap[index]
+                                                  ['idCasa'],
+                                              tempoContrato: contratoMap[index]
+                                                  ['tempoContrato'],
+                                              valorMensal: contratoMap[index]
+                                                  ['valorMensal'],
+                                              dtVencimento: contratoMap[index]
+                                                  ['dtVencimento'],
+                                            ), 
+                                            nomeCasa: contratoMap[index]['nomeCasa'],
+                                            nomeCliente: contratoMap[index]['nomeCliente'],
+                                          ),
                                         ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title:
+                                                const Text('Deletar Contrato'),
+                                            content: const Text(
+                                                'Deseja realmente Deletar o contrato?'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  // Fechar o diálogo quando o botão "Cancelar" for pressionado
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Cancelar'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () async {
+                                                  //Navigator.of(context).pop();
+                                                  await _contratoServices
+                                                      .deleteContrato(
+                                                          contratoMap[index]
+                                                                  ['id'] ??
+                                                              '',
+                                                          contratoMap[index]
+                                                                  ['idCasa'] ??
+                                                              '');
+
+                                                  Navigator.of(context).pop();
+
+                                                  _dialogsService
+                                                      .showSuccessDialog(
+                                                    context,
+                                                    'item apagado com sucesso',
+                                                  );
+                                                  setState(() {});
+                                                },
+                                                child: const Text('Excluir'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+
+                          // });
+                        });
                   } else {
                     // Se snapshot.data for nulo, exibe uma mensagem de erro ou um indicador de carregamento
                     return Text('No data available');

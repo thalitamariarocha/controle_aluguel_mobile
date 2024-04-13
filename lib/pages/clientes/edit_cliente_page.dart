@@ -48,7 +48,7 @@ class _EditClientPageState extends State<EditClientPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cadastro de Inquilino"),
+        title: const Text("Editar Cadastro de Inquilino"),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(right: 30, left: 30),

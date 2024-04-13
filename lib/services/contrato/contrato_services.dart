@@ -15,9 +15,7 @@ class ContratoServices {
     return querySnapshot.docs.map((doc) {
       return Contrato(
         id: doc.id,
-        // cliente: doc['cliente'],
         cpfCliente: doc['cpfCliente'],
-        // nomeCasa: doc['nomeCasa'],
         idCasa: doc['idCasa'],
         valorMensal: doc['valorMensal'],
         dtInicioContrato: doc['dtInicioContrato'],
@@ -30,9 +28,7 @@ class ContratoServices {
 
   Future<bool> cadastrarContrato(cliente, casa, dtInicioContrato,
       dtFinalContrato, tempoContrato, valorMensal, dtVencimento) async {
-    // contratoModel.cliente = cliente;
     contratoModel.cpfCliente = await getCpfCliente(cliente);
-    //contratoModel.nomeCasa = casa;
     contratoModel.idCasa = await getCasaId(casa);
     contratoModel.dtInicioContrato = dtInicioContrato;
     contratoModel.dtFinalContrato = dtFinalContrato;
@@ -86,17 +82,17 @@ class ContratoServices {
   }
 
   //retorna o nome da casa a partir do id, usado na listagem de contratos
-  getCasaNome(String id) async {
+  Future<String> getCasaNome(String id) async {
     final query = await casaCollection.doc(id).get();
-    String a = query['nome'].toString();
-    return a;
+    String casa = query['nome'].toString();
+    return Future.value(casa);
   }
 
   //retorna o nome do cliente a partir do cpf, usado na listagem de contratos
   getClienteNome(String cpf) async {
     final query = await _collectionCliente.doc(cpf).get();
-    String a = query['nome'].toString();
-    return a;
+    String cliente = query['nome'].toString();
+    return Future.value(cliente);
   }
 
   //retorna o cpf do cliente, usado no cadastro do contrato
@@ -112,16 +108,35 @@ class ContratoServices {
     }
   }
 
-  Future<void> updateContrato(Contrato contrato) async {
-    await contratoCollection.doc(contrato.id).update(contrato.toJson());
+  Future<bool> atualizarContrato(id, cpfCliente, idCasa, dtInicioContrato,
+      dtFinalContrato, tempoContrato, valorMensal, dtVencimento) async {
+    contratoModel.cpfCliente = cpfCliente;
+    contratoModel.idCasa = idCasa;
+    contratoModel.dtInicioContrato = dtInicioContrato;
+    contratoModel.dtFinalContrato = dtFinalContrato;
+    contratoModel.tempoContrato = tempoContrato;
+    contratoModel.valorMensal = valorMensal;
+    contratoModel.dtVencimento = dtVencimento;
+    contratoModel.toJson();
+
+    try {
+      final userDocRef = _firestore.collection('contrato').doc(id);
+
+      await userDocRef.update(contratoModel.toJson());
+
+      print('Dados salvos com sucesso.');
+    } catch (e) {
+      print('Erro ao salvar os dados: $e');
+    }
+    return Future.value(true);
   }
 
   Future<void> deleteContrato(String id, casa) async {
-    final query = await casaCollection.where('nome', isEqualTo: casa);
+    final query = await casaCollection.doc(casa);
     final querySnapshot = await query.get();
 
-    for (final docSnapshot in querySnapshot.docs) {
-      await docSnapshot.reference.update({'alugada': 'false'});
+    if (querySnapshot.exists) {
+      query.update({'alugada': 'false'});
     }
 
     await contratoCollection.doc(id).delete();

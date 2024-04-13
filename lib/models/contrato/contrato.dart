@@ -21,7 +21,7 @@ class Contrato {
     this.dtFinalContrato,
     this.tempoContrato,
     this.valorMensal,
-    this.dtVencimento,
+    this.dtVencimento, 
   });
 
   Map<String, dynamic> toJson() {

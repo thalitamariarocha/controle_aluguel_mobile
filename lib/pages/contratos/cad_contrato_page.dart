@@ -1,18 +1,12 @@
-import 'dart:typed_data';
-import 'package:brasil_fields/brasil_fields.dart';
-import 'package:controle_aluguel_mobile/models/casa/casa.dart';
 import 'package:controle_aluguel_mobile/pages/contratos/lista_contrato_page.dart';
 import 'package:controle_aluguel_mobile/services/casa/casa_services.dart';
 import 'package:controle_aluguel_mobile/services/contrato/contrato_services.dart';
 import 'package:controle_aluguel_mobile/services/dialogs.dart';
 import 'package:controle_aluguel_mobile/services/users/user_services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:money_input_formatter/money_input_formatter.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CadContratoPage extends StatefulWidget {
   CadContratoPage({Key? key}) : super(key: key);
@@ -52,7 +46,7 @@ class _CadContratoPageState extends State<CadContratoPage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ListaContrato()),
+              MaterialPageRoute(builder: (context) => ListaContrato()),
             );
           },
         ),

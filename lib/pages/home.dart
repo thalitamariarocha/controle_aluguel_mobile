@@ -1,18 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:controle_aluguel_mobile/pages/casa/cad_casa_page.dart';
 import 'package:controle_aluguel_mobile/pages/casa/lista_casa_page.dart';
-import 'package:controle_aluguel_mobile/pages/clientes/cad_cliente_page.dart';
+
 import 'package:controle_aluguel_mobile/pages/clientes/lista_cliente_page.dart';
-import 'package:controle_aluguel_mobile/pages/contratos/cad_contrato_page.dart';
+
 import 'package:controle_aluguel_mobile/pages/contratos/lista_contrato_page.dart';
 import 'package:controle_aluguel_mobile/pages/financeiro/cad_financeiro_page.dart';
 import 'package:controle_aluguel_mobile/pages/login/login_page.dart';
-import 'package:controle_aluguel_mobile/pages/login/signup_page.dart';
-import 'package:controle_aluguel_mobile/services/dialogs.dart';
-import 'package:controle_aluguel_mobile/services/users/user_services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -213,7 +208,7 @@ class _LoginPageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ListaContrato(),
+                            builder: (context) => ListaContrato(),
                           ),
                         );
                       },
