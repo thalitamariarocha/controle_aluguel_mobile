@@ -159,19 +159,7 @@ class UserServices extends ChangeNotifier {
 
   late String selectedCliente = '';
 
-  // Future<List<String>> loadNamesFromFirebase() async {
-  //   final QuerySnapshot querySnapshot =
-  //       await FirebaseFirestore.instance.collection('cliente').get();
-  //   final List<String> names = querySnapshot.docs
-  //       .map((QueryDocumentSnapshot documentSnapshot) =>
-  //           documentSnapshot['nome'] as String)
-  //       .toList();
-
-  //   if (!names.isEmpty && selectedCliente.isEmpty) {
-  //     selectedCliente = names[0];
-  //   }
-  //   return names;
-  // }
+  
 
   Future<List<String>> loadNamesFromFirebase() async {
     final QuerySnapshot querySnapshot =

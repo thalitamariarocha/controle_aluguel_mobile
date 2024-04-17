@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:controle_aluguel_mobile/models/casa/casa.dart';
 import 'dart:typed_data';
@@ -8,10 +11,12 @@ import 'package:image_picker/image_picker.dart';
 class CasaServices {
   late String idParaImagem;
   Uint8List webImage = Uint8List(8);
+  File? _imageFile;
   FirebaseStorage storage = FirebaseStorage.instance;
   Casa casaModel = Casa();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   CollectionReference get _collectionRef => _firestore.collection('casa');
+  final ImagePicker _picker = ImagePicker();
 
   //essa função abaixo é para a listagem
 
@@ -26,6 +31,7 @@ class CasaServices {
   deleteCadastro(id) async {
     try {
       await FirebaseFirestore.instance.collection('casa').doc(id).delete();
+      await storage.ref().child('casa').child(id).delete();
       print('Dados excluídos com sucesso.');
     } catch (e) {
       print('Erro ao excluir os dados: $e');
@@ -57,6 +63,7 @@ class CasaServices {
 
       casaModel.id = id;
       casaModel.endereco = endereco;
+      casaModel.nome = nome;
       casaModel.image = url;
       casaModel.alugada = alugada;
       casaModel.toJson();
@@ -137,10 +144,32 @@ class CasaServices {
     }
   }
 
+  ImageProvider previewImage() {
+    if (webImage != null) {
+      return MemoryImage(webImage!);
+      // Image.memory(webImage!);
+    } else {
+      return const AssetImage("assets/images/branco.jpg");
+      //Image.memory(Uint8List(0));
+    }
+  }
+
+  void pickImageFromCamera() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      _imageFile = File(pickedFile.path);
+
+      webImage = await _imageFile!.readAsBytes();
+    } else {
+      debugPrint('Nenhuma imagem selecionada.');
+    }
+  }
+
   Future<bool> cadastrarCasa(String nome, endereco, dynamic imageFile) async {
     casaModel.nome = nome;
     casaModel.endereco = endereco;
-    //casaModel.image = imageFile;
     casaModel.alugada = "false";
     casaModel.toJson();
 

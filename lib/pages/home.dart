@@ -6,6 +6,7 @@ import 'package:controle_aluguel_mobile/pages/clientes/lista_cliente_page.dart';
 
 import 'package:controle_aluguel_mobile/pages/contratos/lista_contrato_page.dart';
 import 'package:controle_aluguel_mobile/pages/financeiro/cad_financeiro_page.dart';
+import 'package:controle_aluguel_mobile/pages/financeiro/lista_financeiro_page.dart';
 import 'package:controle_aluguel_mobile/pages/login/login_page.dart';
 
 import 'package:flutter/material.dart';
@@ -138,12 +139,12 @@ class _LoginPageState extends State<HomePage> {
             ListTile(
               title: const Text('Gerenciar Alugueis'),
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => ListaContrato(),
-                //   ),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ListaFinanceiro(),
+                  ),
+                );
               },
             ),
           ],
@@ -228,7 +229,7 @@ class _LoginPageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CadFinanceiroPage(),
+                            builder: (context) => ListaFinanceiro(),
                           ),
                         );
                       },

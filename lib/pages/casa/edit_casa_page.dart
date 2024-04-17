@@ -1,40 +1,57 @@
-import 'package:brasil_fields/brasil_fields.dart';
-import 'package:controle_aluguel_mobile/pages/login/login_page.dart';
+import 'package:controle_aluguel_mobile/models/casa/casa.dart';
 import 'package:controle_aluguel_mobile/services/casa/casa_services.dart';
 import 'package:controle_aluguel_mobile/services/dialogs.dart';
-import 'package:controle_aluguel_mobile/services/users/user_services.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_masked_formatter/multi_masked_formatter.dart';
+import 'package:image_picker/image_picker.dart';
 
-class CadCasaPage extends StatefulWidget {
-  CadCasaPage({Key? key}) : super(key: key);
+class EditCasaPage extends StatefulWidget {
+  //String idCasa;
+  final Casa casa;
+
+  EditCasaPage({
+    Key? key,
+    required this.casa,
+  });
 
   @override
-  State<CadCasaPage> createState() => _CadCasaPageState();
+  State<EditCasaPage> createState() => _EditCasaPageState();
 }
 
-class _CadCasaPageState extends State<CadCasaPage> {
+class _EditCasaPageState extends State<EditCasaPage> {
   final TextEditingController _endereco = TextEditingController();
-
   final TextEditingController _nome = TextEditingController();
-
   CasaServices _casaServices = CasaServices();
-
   Dialogs _dialogs = Dialogs();
-
   final ImagePicker _picker = ImagePicker();
+  late String urlImg = '';
 
-  late String urlImg;
+  @override
+  void initState() {
+    super.initState();
+    carregar(widget.casa);
+  }
+
+  void carregar(Casa casa) {
+    _endereco.text = casa.endereco!;
+    _nome.text = casa.nome!;
+    urlImg = casa.image!;
+  }
+
+  bool newImage() {
+    if (_casaServices.webImage == null ||
+        _casaServices.webImage.isEmpty ||
+        _casaServices.webImage.length < 9) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Imóvel"),
+        title: const Text("Editar Imóvel"),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(right: 50, left: 50),
@@ -87,7 +104,7 @@ class _CadCasaPageState extends State<CadCasaPage> {
                           onTap: () async {
                             await _casaServices.pickAndUploadImage();
                             Navigator.of(context).pop();
-                            setState(() {});
+                            //CloseButton();
                           },
                         ),
                         ListTile(
@@ -96,7 +113,6 @@ class _CadCasaPageState extends State<CadCasaPage> {
                           onTap: () async {
                             _casaServices.pickImageFromCamera();
                             Navigator.of(context).pop();
-                            setState(() {});
                           },
                         ),
                       ],
@@ -110,8 +126,6 @@ class _CadCasaPageState extends State<CadCasaPage> {
             ),
 
             const SizedBox(height: 30),
-
-           
 
             //Image(image: _casaServices.previewImage()),
 
@@ -138,14 +152,15 @@ class _CadCasaPageState extends State<CadCasaPage> {
                         return;
                       }
 
-                      if (await _casaServices.cadastrarCasa(
-                        _nome.text,
-                        _endereco.text,
-                        _casaServices.webImage,
-                      )) {
+                      if (await _casaServices.atualizaCasa(
+                              widget.casa.id!,
+                              _nome.text,
+                              _endereco.text,
+                              newImage() ? _casaServices.webImage : urlImg,
+                              widget.casa.alugada!) ==
+                          true) {
                         _dialogs.showSuccessDialog(context, "cadastro salvo!");
-                        _endereco.clear();
-                        _nome.clear();
+                        Navigator.of(context).pop();
                       } else {
                         debugPrint("erro, favor repetir");
                       }

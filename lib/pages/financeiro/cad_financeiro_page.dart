@@ -21,7 +21,7 @@ class _CadFinanceiroPageState extends State<CadFinanceiroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('CadFinanceiroPage'),
+        title: const Text('Lançamento de Aluguel'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(right: 30, left: 30),

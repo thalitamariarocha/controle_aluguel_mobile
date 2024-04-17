@@ -1,6 +1,7 @@
 import 'package:controle_aluguel_mobile/models/casa/casa.dart';
 import 'package:controle_aluguel_mobile/models/usuarios/cliente.dart';
 import 'package:controle_aluguel_mobile/pages/casa/cad_casa_page.dart';
+import 'package:controle_aluguel_mobile/pages/casa/edit_casa_page.dart';
 import 'package:controle_aluguel_mobile/pages/clientes/cad_cliente_page.dart';
 import 'package:controle_aluguel_mobile/pages/home.dart';
 import 'package:controle_aluguel_mobile/services/casa/casa_services.dart';
@@ -27,6 +28,7 @@ class _ListaCasaPageState extends State<ListaCasa> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     return Scaffold(
         appBar: AppBar(
           title: const Text("Casas"),
@@ -41,6 +43,7 @@ class _ListaCasaPageState extends State<ListaCasa> {
           ),
         ),
         body: SingleChildScrollView(
+          padding: EdgeInsets.all(5),
           child: Column(
             children: [
               FutureBuilder<List<Casa>>(
@@ -79,63 +82,72 @@ class _ListaCasaPageState extends State<ListaCasa> {
                               ),
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                //Image.network(imageUrl),
-                                Text(nome),
-                                Text(endereco),
-                                IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //       builder: (context) =>
-                                    //           EditContratoPage(
-                                    //             idContrato: id,
-                                    //           )),
-                                    // );
-                                  },
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(nome),
+                                    Text(endereco),
+                                  ],
                                 ),
-                                IconButton(
-                                  icon: const Icon(Icons.delete),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text('Deletar Contrato'),
-                                          content: const Text(
-                                              'Deseja realmente Deletar o contrato?'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                // Fechar o diálogo quando o botão "Cancelar" for pressionado
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Cancelar'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () async {
-                                                //Navigator.of(context).pop();
-                                                await _casaServices
-                                                    .deleteCadastro(id);
-                                                Navigator.of(context).pop();
-
-                                                _dialogsService
-                                                    .showSuccessDialog(
-                                                  context,
-                                                  'item apagado com sucesso',
-                                                );
-                                                setState(() {});
-                                              },
-                                              child: const Text('Excluir'),
-                                            ),
-                                          ],
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditCasaPage(
+                                                    casa: snapshot.data![index],
+                                                  )),
                                         );
                                       },
-                                    );
-                                  },
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'Deletar Contrato'),
+                                              content: const Text(
+                                                  'Deseja realmente Deletar o contrato?'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    // Fechar o diálogo quando o botão "Cancelar" for pressionado
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('Cancelar'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () async {
+                                                    //Navigator.of(context).pop();
+                                                    await _casaServices
+                                                        .deleteCadastro(id);
+                                                    Navigator.of(context).pop();
+
+                                                    _dialogsService
+                                                        .showSuccessDialog(
+                                                      context,
+                                                      'item apagado com sucesso',
+                                                    );
+                                                    setState(() {});
+                                                  },
+                                                  child: const Text('Excluir'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -149,6 +161,7 @@ class _ListaCasaPageState extends State<ListaCasa> {
                   }
                 },
               ),
+              const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
                   style: ButtonStyle(

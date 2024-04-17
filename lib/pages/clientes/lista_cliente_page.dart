@@ -40,6 +40,7 @@ class _ListaClientePageState extends State<ListaCliente> {
           ),
         ),
         body: SingleChildScrollView(
+          padding: const EdgeInsets.all(5),
           child: Column(
             children: [
               FutureBuilder<List<Cliente>>(
@@ -77,62 +78,74 @@ class _ListaClientePageState extends State<ListaCliente> {
                               ),
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(nome),
-                                Text(cpf),
-                                IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => EditClientPage(
-                                                cliente: snapshot.data![index],
-                                              )),
-                                    );
-                                  },
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.delete),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text('Deletar Contrato'),
-                                          content: const Text(
-                                              'Deseja realmente Deletar o contrato?'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                // Fechar o diálogo quando o botão "Cancelar" for pressionado
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Cancelar'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () async {
-                                                //Navigator.of(context).pop();
-                                                await _userServices
-                                                    .deleteCadastro(id);
-
-                                                Navigator.of(context).pop();
-
-                                                _dialogsService
-                                                    .showSuccessDialog(
-                                                  context,
-                                                  'item apagado com sucesso',
-                                                );
-                                                setState(() {});
-                                              },
-                                              child: const Text('Excluir'),
-                                            ),
-                                          ],
+                                Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(nome),
+                                      Text(cpf),
+                                    ]),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditClientPage(
+                                                    cliente:
+                                                        snapshot.data![index],
+                                                  )),
                                         );
                                       },
-                                    );
-                                  },
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'Deletar Contrato'),
+                                              content: const Text(
+                                                  'Deseja realmente Deletar o contrato?'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    // Fechar o diálogo quando o botão "Cancelar" for pressionado
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('Cancelar'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () async {
+                                                    //Navigator.of(context).pop();
+                                                    await _userServices
+                                                        .deleteCadastro(id);
+
+                                                    Navigator.of(context).pop();
+
+                                                    _dialogsService
+                                                        .showSuccessDialog(
+                                                      context,
+                                                      'item apagado com sucesso',
+                                                    );
+                                                    setState(() {});
+                                                  },
+                                                  child: const Text('Excluir'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

@@ -167,7 +167,7 @@ class ContratoServices {
         await FirebaseFirestore.instance.collection('contrato').get();
     final List<String> names = querySnapshot.docs
         .map((QueryDocumentSnapshot documentSnapshot) =>
-            documentSnapshot['id'] as String)
+            documentSnapshot['idCasa'] as String)
         .toList();
 
     if (!names.isEmpty && selectedContrato.isEmpty) {

@@ -83,6 +83,7 @@ class _ListaContratoState extends State<ListaContrato> {
           ),
         ),
         body: SingleChildScrollView(
+          padding: const EdgeInsets.all(5),
           child: Column(
             children: [
               FutureBuilder(
@@ -127,9 +128,11 @@ class _ListaContratoState extends State<ListaContrato> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(contratoMap[index]['nomeCliente']),
                                       Text(contratoMap[index]['nomeCasa']),
@@ -139,6 +142,8 @@ class _ListaContratoState extends State<ListaContrato> {
                                     ],
                                   ),
                                   Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text('Inicio - ' + dtInicioContrato),
                                       Text('Final - ' + dtFinalContrato),
@@ -147,91 +152,105 @@ class _ListaContratoState extends State<ListaContrato> {
                                       ),
                                     ],
                                   ),
-                                  IconButton(
-                                    icon: const Icon(Icons.edit),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              EditContratoPage(
-                                            contratoModel:
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.edit),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditContratoPage(
+                                                contratoModel:
 
-                                                // snapshot.data![index],
+                                                    // snapshot.data![index],
 
-                                                Contrato(
-                                              cpfCliente: contratoMap[index]
-                                                  ['cpfCliente'],
-                                              dtFinalContrato:
-                                                  contratoMap[index]
-                                                      ['dtFinalContrato'],
-                                              dtInicioContrato:
-                                                  contratoMap[index]
-                                                      ['dtInicioContrato'],
-                                              id: contratoMap[index]['id'],
-                                              idCasa: contratoMap[index]
-                                                  ['idCasa'],
-                                              tempoContrato: contratoMap[index]
-                                                  ['tempoContrato'],
-                                              valorMensal: contratoMap[index]
-                                                  ['valorMensal'],
-                                              dtVencimento: contratoMap[index]
-                                                  ['dtVencimento'],
-                                            ), 
-                                            nomeCasa: contratoMap[index]['nomeCasa'],
-                                            nomeCliente: contratoMap[index]['nomeCliente'],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title:
-                                                const Text('Deletar Contrato'),
-                                            content: const Text(
-                                                'Deseja realmente Deletar o contrato?'),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  // Fechar o diálogo quando o botão "Cancelar" for pressionado
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Cancelar'),
+                                                    Contrato(
+                                                  cpfCliente: contratoMap[index]
+                                                      ['cpfCliente'],
+                                                  dtFinalContrato:
+                                                      contratoMap[index]
+                                                          ['dtFinalContrato'],
+                                                  dtInicioContrato:
+                                                      contratoMap[index]
+                                                          ['dtInicioContrato'],
+                                                  id: contratoMap[index]['id'],
+                                                  idCasa: contratoMap[index]
+                                                      ['idCasa'],
+                                                  tempoContrato:
+                                                      contratoMap[index]
+                                                          ['tempoContrato'],
+                                                  valorMensal:
+                                                      contratoMap[index]
+                                                          ['valorMensal'],
+                                                  dtVencimento:
+                                                      contratoMap[index]
+                                                          ['dtVencimento'],
+                                                ),
+                                                nomeCasa: contratoMap[index]
+                                                    ['nomeCasa'],
+                                                nomeCliente: contratoMap[index]
+                                                    ['nomeCliente'],
                                               ),
-                                              TextButton(
-                                                onPressed: () async {
-                                                  //Navigator.of(context).pop();
-                                                  await _contratoServices
-                                                      .deleteContrato(
-                                                          contratoMap[index]
-                                                                  ['id'] ??
-                                                              '',
-                                                          contratoMap[index]
-                                                                  ['idCasa'] ??
-                                                              '');
-
-                                                  Navigator.of(context).pop();
-
-                                                  _dialogsService
-                                                      .showSuccessDialog(
-                                                    context,
-                                                    'item apagado com sucesso',
-                                                  );
-                                                  setState(() {});
-                                                },
-                                                child: const Text('Excluir'),
-                                              ),
-                                            ],
+                                            ),
                                           );
                                         },
-                                      );
-                                    },
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete),
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Text(
+                                                    'Deletar Contrato'),
+                                                content: const Text(
+                                                    'Deseja realmente Deletar o contrato?'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      // Fechar o diálogo quando o botão "Cancelar" for pressionado
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child:
+                                                        const Text('Cancelar'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      //Navigator.of(context).pop();
+                                                      await _contratoServices
+                                                          .deleteContrato(
+                                                              contratoMap[index]
+                                                                      ['id'] ??
+                                                                  '',
+                                                              contratoMap[index]
+                                                                      [
+                                                                      'idCasa'] ??
+                                                                  '');
+
+                                                      Navigator.of(context)
+                                                          .pop();
+
+                                                      _dialogsService
+                                                          .showSuccessDialog(
+                                                        context,
+                                                        'item apagado com sucesso',
+                                                      );
+                                                      setState(() {});
+                                                    },
+                                                    child:
+                                                        const Text('Excluir'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
