@@ -33,7 +33,8 @@ class Dialogs {
             TextButton(
               onPressed: () {
                 // Fechar o diálogo quando o botão "OK" for pressionado
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(context);
+                Navigator.of(context).pop(context);
               },
               child: Text('OK'),
             ),

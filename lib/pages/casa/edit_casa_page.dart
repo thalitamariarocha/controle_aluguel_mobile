@@ -47,6 +47,12 @@ class _EditCasaPageState extends State<EditCasaPage> {
     return true;
   }
 
+  closeScreen() {
+    _dialogs.showSuccessDialog(context, "cadastro salvo!");
+
+    // Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,8 +165,7 @@ class _EditCasaPageState extends State<EditCasaPage> {
                               newImage() ? _casaServices.webImage : urlImg,
                               widget.casa.alugada!) ==
                           true) {
-                        _dialogs.showSuccessDialog(context, "cadastro salvo!");
-                        Navigator.of(context).pop();
+                        closeScreen();
                       } else {
                         debugPrint("erro, favor repetir");
                       }

@@ -1,10 +1,19 @@
+import 'package:controle_aluguel_mobile/models/contrato/contrato.dart';
+import 'package:controle_aluguel_mobile/models/financeiro/financeiro.dart';
 import 'package:controle_aluguel_mobile/services/casa/casa_services.dart';
 import 'package:controle_aluguel_mobile/services/contrato/contrato_services.dart';
 import 'package:controle_aluguel_mobile/services/dialogs.dart';
+import 'package:controle_aluguel_mobile/services/financeiro/financeiro_services.dart';
 import 'package:flutter/material.dart';
 
 class CadFinanceiroPage extends StatefulWidget {
-  @override
+  final Contrato contratoModel;
+
+  const CadFinanceiroPage({
+    Key? key,
+    required this.contratoModel,
+  });
+
   _CadFinanceiroPageState createState() => _CadFinanceiroPageState();
 }
 
@@ -13,7 +22,8 @@ class _CadFinanceiroPageState extends State<CadFinanceiroPage> {
   final TextEditingController _vlrPagamento = TextEditingController();
   final TextEditingController _formaPagamento = TextEditingController();
   final TextEditingController _descricao = TextEditingController();
-  CasaServices _casaServices = CasaServices();
+
+  FinanceiroServices _financeiroServices = FinanceiroServices();
   ContratoServices _contratoServices = ContratoServices();
   Dialogs _dialogs = Dialogs();
 
@@ -21,49 +31,12 @@ class _CadFinanceiroPageState extends State<CadFinanceiroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lançamento de Aluguel'),
+        title: const Text('Novo Recebimento de Aluguel'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(right: 30, left: 30),
         child: Column(
           children: [
-            SizedBox(height: 30),
-            const Center(
-              child: Text(
-                "Selecione o contrato",
-              ),
-            ),
-            FutureBuilder<List<String>>(
-              future: _contratoServices.loadNamesFromFirebase()
-                  as Future<List<String>>?,
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-                if (snapshot.hasError) {
-                  return const Text('Erro ao carregar os nomes');
-                }
-
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return DropdownButton<String>(
-                    alignment: Alignment.bottomCenter,
-                    borderRadius: BorderRadius.circular(10),
-                    value: _casaServices.selectedCasa,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _casaServices.selectedCasa = newValue!;
-                      });
-                    },
-                    items: snapshot.data!.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  );
-                }
-
-                return const CircularProgressIndicator();
-              },
-            ),
             SizedBox(height: 30),
             TextFormField(
               controller: _dtPagamento,
@@ -94,6 +67,7 @@ class _CadFinanceiroPageState extends State<CadFinanceiroPage> {
                 labelText: 'Descrição',
               ),
             ),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -103,8 +77,15 @@ class _CadFinanceiroPageState extends State<CadFinanceiroPage> {
                       // minimumSize: const Size.fromHeight(50),
                       shape: LinearBorder.bottom(),
                     ),
-                    onPressed:
-                        () async {}, //chamada do signup do user_services (controller)
+                    onPressed: () async {
+                      await _financeiroServices.save(Financeiro(
+                        dtPagamento: _dtPagamento.text,
+                        vlrPagamento: _vlrPagamento.text,
+                        formaPagamento: _formaPagamento.text,
+                        descricao: _descricao.text,
+                        idContrato: widget.contratoModel.id,
+                      ));
+                    }, //chamada do signup do user_services (controller)
                     child: const Text(
                       "Registrar",
                       style:
