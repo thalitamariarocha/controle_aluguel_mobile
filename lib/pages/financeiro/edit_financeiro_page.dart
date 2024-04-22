@@ -1,6 +1,5 @@
-import 'package:controle_aluguel_mobile/models/contrato/contrato.dart';
 import 'package:controle_aluguel_mobile/models/financeiro/financeiro.dart';
-import 'package:controle_aluguel_mobile/services/casa/casa_services.dart';
+import 'package:controle_aluguel_mobile/services/contrato/contrato_services.dart';
 import 'package:controle_aluguel_mobile/services/contrato/contrato_services.dart';
 import 'package:controle_aluguel_mobile/services/dialogs.dart';
 import 'package:controle_aluguel_mobile/services/financeiro/financeiro_services.dart';
@@ -8,18 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:money_input_formatter/money_input_formatter.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 
-class CadFinanceiroPage extends StatefulWidget {
-  final Contrato contratoModel;
-
-  const CadFinanceiroPage({
+class EditFinanceiroPage extends StatefulWidget {
+  final Financeiro financeiroModel;
+  const EditFinanceiroPage({
     Key? key,
-    required this.contratoModel,
+    required this.financeiroModel,
   });
 
-  _CadFinanceiroPageState createState() => _CadFinanceiroPageState();
+  @override
+  State<EditFinanceiroPage> createState() => _EditFinanceiroPageState();
 }
 
-class _CadFinanceiroPageState extends State<CadFinanceiroPage> {
+class _EditFinanceiroPageState extends State<EditFinanceiroPage> {
   final TextEditingController _dtPagamento = TextEditingController();
   final TextEditingController _vlrPagamento = TextEditingController();
   final TextEditingController _formaPagamento = TextEditingController();
@@ -28,6 +27,21 @@ class _CadFinanceiroPageState extends State<CadFinanceiroPage> {
   FinanceiroServices _financeiroServices = FinanceiroServices();
   ContratoServices _contratoServices = ContratoServices();
   Dialogs _dialogs = Dialogs();
+
+  carregarDados(Financeiro financeiroModel) {
+    final idContrato = widget.financeiroModel.idContrato!;
+    _dtPagamento.text = widget.financeiroModel.dtPagamento!;
+    _vlrPagamento.text = widget.financeiroModel.vlrPagamento!;
+    _formaPagamento.text = widget.financeiroModel.formaPagamento!;
+    _descricao.text = widget.financeiroModel.descricao!;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    carregarDados(widget.financeiroModel);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +72,10 @@ class _CadFinanceiroPageState extends State<CadFinanceiroPage> {
             TextFormField(
               controller: _vlrPagamento,
               decoration: const InputDecoration(
-                labelText:
-                    'Valor do pagamento (use ponto para separar decimais)',
+                labelText: 'Valor do pagamento (use ponto para separar decimais)',
               ),
               keyboardType: TextInputType.number,
-              //inputFormatters: [MoneyInputFormatter()],
+              // inputFormatters: [MoneyInputFormatter()],
             ),
             SizedBox(height: 30),
             TextFormField(
@@ -89,27 +102,27 @@ class _CadFinanceiroPageState extends State<CadFinanceiroPage> {
                       shape: LinearBorder.bottom(),
                     ),
                     onPressed: () async {
-                      if (await _financeiroServices.save(Financeiro(
-                            dtPagamento: _dtPagamento.text,
-                            vlrPagamento: _vlrPagamento.text,
-                            formaPagamento: _formaPagamento.text,
-                            descricao: _descricao.text,
-                            idContrato: widget.contratoModel.id,
-                          )) ==
+                      if (await _financeiroServices.updateCadastro(Financeiro(
+                              id: widget.financeiroModel.id,
+                              idContrato: widget.financeiroModel.idContrato,
+                              dtPagamento: _dtPagamento.text,
+                              vlrPagamento: _vlrPagamento.text,
+                              formaPagamento: _formaPagamento.text,
+                              descricao: _descricao.text)) ==
                           true) {
                         _dialogs.showSuccessDialog(
-                            context, 'Pagamento salvo com sucesso!');
+                            context, 'Pagamento atualizado com sucesso!');
                         onpressed:
                         () {
                           Navigator.pop(context);
                         };
                       } else {
                         _dialogs.showErrorDialog(
-                            context, 'Erro ao salvar o pagamento.');
+                            context, 'Erro ao atualizar o pagamento.');
                       }
                     },
                     child: const Text(
-                      "Registrar",
+                      "Salvar",
                       // style:
                       //     TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),

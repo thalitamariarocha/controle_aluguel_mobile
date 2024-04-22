@@ -1,9 +1,11 @@
 import 'package:controle_aluguel_mobile/models/contrato/contrato.dart';
 import 'package:controle_aluguel_mobile/models/financeiro/financeiro.dart';
 import 'package:controle_aluguel_mobile/pages/financeiro/cad_financeiro_page.dart';
+import 'package:controle_aluguel_mobile/pages/financeiro/edit_financeiro_page.dart';
 import 'package:controle_aluguel_mobile/services/dialogs.dart';
 import 'package:controle_aluguel_mobile/services/financeiro/financeiro_services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class DetalheFinanceiroPage extends StatefulWidget {
   final Contrato contratoModel;
@@ -28,8 +30,8 @@ class _DetalheFinanceiroPageState extends State<DetalheFinanceiroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalhes do Financeiro'),
-      ),
+          // title: const Text('Detalhes do Financeiro'),
+          ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(5),
         child: Column(
@@ -65,14 +67,12 @@ class _DetalheFinanceiroPageState extends State<DetalheFinanceiroPage> {
                   children: [
                     Text(
                         'Data de Início: ${widget.contratoModel.dtInicioContrato!}'),
-                    //Text(widget.contratoModel.dtInicioContrato!),
                   ],
                 ),
                 Column(
                   children: [
                     Text(
                         'Data Final: ${widget.contratoModel.dtFinalContrato!}'),
-                    //Text(widget.contratoModel.dtFinalContrato!),
                   ],
                 ),
               ],
@@ -85,30 +85,46 @@ class _DetalheFinanceiroPageState extends State<DetalheFinanceiroPage> {
                   children: [
                     Text(
                         'Valor do Aluguel: ${widget.contratoModel.valorMensal}'),
-                    //Text(widget.contratoModel.valorMensal.toString()),
                   ],
                 ),
                 Column(
                   children: [
                     Text(
                         'Dia de Vencimento: ${widget.contratoModel.dtVencimento}'),
-                    //Text(widget.contratoModel.dtVencimento.toString()),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 10,
-              width: double.infinity,
-              child: Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(width: 1.0, color: Colors.grey),
-                  ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text(
+                  'Total Recebido: ',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-              ),
+                FutureBuilder<String>(
+                  future: _financeiroServices
+                      .totalRecebido(widget.contratoModel.id!),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+                    if (snapshot.hasData) {
+                      String totalRecebido = snapshot.data!;
+                      return Text(
+                        'R\$ ${totalRecebido.toString()}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
+            const SizedBox(height: 10),
             FutureBuilder<List<Financeiro>>(
               future:
                   _financeiroServices.allPagamentos(widget.contratoModel.id!),
@@ -151,15 +167,28 @@ class _DetalheFinanceiroPageState extends State<DetalheFinanceiroPage> {
                                 children: [
                                   IconButton(
                                     icon: const Icon(Icons.edit),
-                                    onPressed: () {
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) => CadFinanceiroPage(
-                                      //       financeiroModel: snapshot.data![index],
-                                      //     ),
-                                      //   ),
-                                      // );
+                                    onPressed: () async {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditFinanceiroPage(
+                                                  financeiroModel: Financeiro(
+                                            id: snapshot.data![index].id,
+                                            dtPagamento: snapshot
+                                                .data![index].dtPagamento,
+                                            vlrPagamento: snapshot
+                                                .data![index].vlrPagamento,
+                                            formaPagamento: snapshot
+                                                .data![index].formaPagamento,
+                                            descricao:
+                                                snapshot.data![index].descricao,
+                                            idContrato: snapshot
+                                                .data![index].idContrato,
+                                          )),
+                                        ),
+                                      );
+                                      setState(() {});
                                     },
                                   ),
                                   IconButton(
@@ -185,7 +214,6 @@ class _DetalheFinanceiroPageState extends State<DetalheFinanceiroPage> {
                                                   await _financeiroServices
                                                       .deleteCadastro(snapshot
                                                           .data![index].id);
-                                                  Navigator.of(context).pop();
 
                                                   _dialogsService
                                                       .showSuccessDialog(
@@ -217,21 +245,28 @@ class _DetalheFinanceiroPageState extends State<DetalheFinanceiroPage> {
                 }
               },
             ),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CadFinanceiroPage(
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      // minimumSize: const Size.fromHeight(50),
+                      shape: LinearBorder.bottom(),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CadFinanceiroPage(
                             contratoModel: widget.contratoModel,
-                            ),
-                      ),
-                    );
-                  },
-                  child: const Text('Cadastrar nova entrada'),
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text('Cadastrar nova entrada'),
+                  ),
                 ),
               ],
             )

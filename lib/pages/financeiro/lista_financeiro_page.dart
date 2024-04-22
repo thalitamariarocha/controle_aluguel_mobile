@@ -24,11 +24,11 @@ class _ListaFinanceiroState extends State<ListaFinanceiro> {
   DateTime hoje = DateTime.now();
   List<Contrato> contratos = [];
   List<Map<String, dynamic>> listagemContrato = [];
-  @override
-  void didUpdateWidget(covariant ListaFinanceiro oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-  }
+  // @override
+  // void didUpdateWidget(covariant ListaFinanceiro oldWidget) {
+  //   // TODO: implement didUpdateWidget
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   Future<String> getCasaNome(String idCasa) async {
     String nomeCasa = await _contratoServices.getCasaNome(idCasa);
@@ -58,7 +58,6 @@ class _ListaFinanceiroState extends State<ListaFinanceiro> {
         'dtVencimento': contrato.dtVencimento,
       });
     }
-    // debugPrint('listagem --> $listagemContrato');
     return listagemContrato;
   }
 
@@ -70,7 +69,7 @@ class _ListaFinanceiroState extends State<ListaFinanceiro> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {});
+    //setState(() {});
     return Scaffold(
         appBar: AppBar(
           title: const Text("Contratos"),
@@ -88,15 +87,6 @@ class _ListaFinanceiroState extends State<ListaFinanceiro> {
           padding: const EdgeInsets.all(5),
           child: Column(
             children: [
-              //-----------------------------------------------
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //    ElevatedButton(onPressed: onPressed, child: child)
-              //   ],
-              // ),
-              //-----------------------------------------------
-
               const Text("selecione o contrato:"),
               const SizedBox(
                 height: 5,
@@ -170,8 +160,8 @@ class _ListaFinanceiroState extends State<ListaFinanceiro> {
                                   Row(
                                     children: [
                                       IconButton(
-                                          onPressed: () {
-                                            Navigator.push(
+                                          onPressed: () async {
+                                            await Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
@@ -206,9 +196,9 @@ class _ListaFinanceiroState extends State<ListaFinanceiro> {
                                                       contratoMap[index]
                                                           ['nomeCliente'],
                                                 ),
-                                                //contratoMap[index]),
                                               ),
                                             );
+                                            setState(() {});
                                           },
                                           icon: Icon(Icons.settings)),
                                     ],

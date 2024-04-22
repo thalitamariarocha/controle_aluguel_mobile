@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:controle_aluguel_mobile/models/financeiro/financeiro.dart';
+import 'package:flutter/material.dart';
 
 class FinanceiroServices {
   final diaHoje = DateTime.now();
@@ -11,12 +12,24 @@ class FinanceiroServices {
     print('Pagamento realizado com sucesso!');
   }
 
-  calculoVencimento(dtVencimento) {
-    // return DateTime.now().add(Duration(days: 30));
+  Future<String> totalRecebido(idContrato) async {
+    double total = 0.0;
+    QuerySnapshot querySnapshot =
+        await _collectionRef.where('idContrato', isEqualTo: idContrato).get();
+    for (var doc in querySnapshot.docs) {
+      print('vlrPagamento: ${doc['vlrPagamento']}');
+
+      double vlrPagamento = double.parse(doc['vlrPagamento'].toString());
+      // doc['vlrPagamento'] as double; // Get vlrPagamento as double
+      total += vlrPagamento; // Add to total
+    }
+
+    return total.toString();
   }
 
   Future<List<Financeiro>> allPagamentos(idContrato) async {
-    QuerySnapshot querySnapshot = await _collectionRef.get();
+    QuerySnapshot querySnapshot =
+        await _collectionRef.orderBy('dtPagamento').get();
     return querySnapshot.docs.map((doc) {
       return Financeiro(
         id: doc.id,
@@ -29,17 +42,40 @@ class FinanceiroServices {
     }).toList();
   }
 
-  Future<void> save(Financeiro financeiro) async {
+  Future<bool> save(Financeiro financeiro) async {
     try {
       await _collectionRef.add(financeiro.toJson());
-      //final userDocRef = _firestore.collection('casa').doc();
 
       print('Pagamento salvo com sucesso.');
+
+      _collectionRef
+          .where('idContrato', isEqualTo: financeiro.idContrato)
+          .get()
+          .then((value) {
+        final id = value.docs[0].id;
+
+        _collectionRef.doc(id).update({
+          'id': id,
+        });
+      });
+
+      return true;
     } catch (e) {
       print('Erro ao salvar o pagamento: $e');
+
+      return false;
     }
-    financeiro.id = _collectionRef.doc().id;
-    await _collectionRef.doc(financeiro.id).update({'id': financeiro.id});
+  }
+
+  Future<bool> updateCadastro(Financeiro financeiro) async {
+    try {
+      await _collectionRef.doc(financeiro.id).update(financeiro.toJson());
+      print('Dados atualizados com sucesso.');
+      return true;
+    } catch (e) {
+      print('Erro ao atualizar os dados: $e');
+      return false;
+    }
   }
 
   deleteCadastro(id) async {
