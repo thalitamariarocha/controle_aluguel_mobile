@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _password = TextEditingController();
   UserServices _userServices = UserServices();
   Dialogs _dialogs = Dialogs();
+   bool _rememberMe = false;
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                 ),
+                
                 const SizedBox(
                   height: 20,
                 ),

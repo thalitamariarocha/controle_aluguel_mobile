@@ -8,9 +8,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
+
+ // await Hive.openBox('loginBox');
+ 
+
   // const firebaseConfig = FirebaseOptions(
   //   apiKey: "AIzaSyD84IB-XNAB23-23LMOy6wyA1TEyCOrIJk",
   //   projectId: "webback-fb243",
@@ -81,7 +86,7 @@ class MyApp extends StatelessWidget {
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 20.0),
         ),
       ),
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }

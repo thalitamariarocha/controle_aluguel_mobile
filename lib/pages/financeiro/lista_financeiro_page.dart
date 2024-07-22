@@ -24,11 +24,7 @@ class _ListaFinanceiroState extends State<ListaFinanceiro> {
   DateTime hoje = DateTime.now();
   List<Contrato> contratos = [];
   List<Map<String, dynamic>> listagemContrato = [];
-  // @override
-  // void didUpdateWidget(covariant ListaFinanceiro oldWidget) {
-  //   // TODO: implement didUpdateWidget
-  //   super.didUpdateWidget(oldWidget);
-  // }
+  
 
   Future<String> getCasaNome(String idCasa) async {
     String nomeCasa = await _contratoServices.getCasaNome(idCasa);
