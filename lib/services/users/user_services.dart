@@ -159,8 +159,6 @@ class UserServices extends ChangeNotifier {
 
   late String selectedCliente = '';
 
-  
-
   Future<List<String>> loadNamesFromFirebase() async {
     final QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection('cliente').get();
@@ -173,6 +171,35 @@ class UserServices extends ChangeNotifier {
       selectedCliente = names[0];
     }
     return names;
+  }
+
+  Future<String> buscarClientePorNome(String nome) async {
+    try {
+      // Faz a consulta no Firestore para buscar documentos que correspondam ao nome
+      QuerySnapshot snapshot = await _firestore
+          .collection('cliente')
+          .where('nome', isEqualTo: nome)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // Pega o primeiro documento encontrado (assumindo que os nomes são únicos)
+        DocumentSnapshot document = snapshot.docs.first;
+        Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+        // data['id'] = document.id;
+        // data['email'] = document['email'];
+        final email = data['email'].toString();
+        // ignore: avoid_print
+        //print(email);
+
+        return email;
+      } else {
+        // Retorna um map vazio se não encontrou nenhum documento
+        return '';
+      }
+    } catch (e) {
+      print('Erro ao buscar cliente: $e');
+      return '';
+    }
   }
 
   Future<List<Cliente>> allClientes() async {

@@ -3,6 +3,7 @@
 import 'package:controle_aluguel_mobile/pages/casa/lista_casa_page.dart';
 
 import 'package:controle_aluguel_mobile/pages/clientes/lista_cliente_page.dart';
+import 'package:controle_aluguel_mobile/pages/cobranca/cobranca_email_page.dart';
 
 import 'package:controle_aluguel_mobile/pages/contratos/lista_contrato_page.dart';
 import 'package:controle_aluguel_mobile/pages/financeiro/cad_financeiro_page.dart';
@@ -62,13 +63,13 @@ class _LoginPageState extends State<HomePage> {
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        ListTile(
-                          title: Text("Minha Conta"),
-                          onTap: () {
-                            // Adicione a ação que você deseja executar ao clicar em "Minha Conta"
-                            Navigator.pop(context);
-                          },
-                        ),
+                        // ListTile(
+                        //   title: Text("Minha Conta"),
+                        //   onTap: () {
+                        //     // Adicione a ação que você deseja executar ao clicar em "Minha Conta"
+                        //     Navigator.pop(context);
+                        //   },
+                        // ),
                         ListTile(
                           title: Text("Sair"),
                           onTap: () {
@@ -143,6 +144,17 @@ class _LoginPageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ListaFinanceiro(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Enviar Email'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CobrancaEmailPage(),
                   ),
                 );
               },
@@ -237,6 +249,42 @@ class _LoginPageState extends State<HomePage> {
                     ),
                     const Text('Alugueis'),
                   ],
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              textDirection: TextDirection.ltr,
+              children: [
+                Column(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.email),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CobrancaEmailPage(),
+                          ),
+                        );
+                      },
+                      iconSize: (MediaQuery.of(context).size.width) / 8,
+                    ),
+                    const Text('Email'),
+                  ],
+                ),
+                Column(
+                  children: [
+                    IconButton(
+                      color: Colors.white,
+                      icon: const Icon(Icons.email),
+                      onPressed: () {},
+                      iconSize: (MediaQuery.of(context).size.width) / 8,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  width: 60,
                 ),
               ],
             )

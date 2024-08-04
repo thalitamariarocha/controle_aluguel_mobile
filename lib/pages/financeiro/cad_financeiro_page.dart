@@ -1,5 +1,6 @@
 import 'package:controle_aluguel_mobile/models/contrato/contrato.dart';
 import 'package:controle_aluguel_mobile/models/financeiro/financeiro.dart';
+import 'package:controle_aluguel_mobile/pages/financeiro/lista_financeiro_page.dart';
 import 'package:controle_aluguel_mobile/services/casa/casa_services.dart';
 import 'package:controle_aluguel_mobile/services/contrato/contrato_services.dart';
 import 'package:controle_aluguel_mobile/services/dialogs.dart';
@@ -101,7 +102,13 @@ class _CadFinanceiroPageState extends State<CadFinanceiroPage> {
                             context, 'Pagamento salvo com sucesso!');
                         onpressed:
                         () {
-                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ListaFinanceiro(),
+                              ),
+                            );
+                          //Navigator.pop(context);
                         };
                       } else {
                         _dialogs.showErrorDialog(

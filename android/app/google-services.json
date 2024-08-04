@@ -9,6 +9,35 @@
       "client_info": {
         "mobilesdk_app_id": "1:575373742180:android:64a2e531f2bf9fd1d9cf71",
         "android_client_info": {
+          "package_name": "com.example.controle_aluguel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "575373742180-9ui3udp9mevmlbnt32nopcif4oubjubl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2nhNhKWjch4MTY3y8JB5qIgS-BfoM2q8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "575373742180-9ui3udp9mevmlbnt32nopcif4oubjubl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575373742180:android:8f246a49d34133efd9cf71",
+        "android_client_info": {
           "package_name": "com.example.controle_aluguel_mobile"
         }
       },

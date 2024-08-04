@@ -1,4 +1,5 @@
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:controle_aluguel_mobile/pages/clientes/lista_cliente_page.dart';
 import 'package:controle_aluguel_mobile/pages/login/login_page.dart';
 import 'package:controle_aluguel_mobile/services/dialogs.dart';
 import 'package:controle_aluguel_mobile/services/users/user_services.dart';
@@ -123,7 +124,13 @@ class CadastroCliente extends StatelessWidget {
                         _telefone.text,
                         _email.text,
                       )) {
-                        Navigator.pop(context);
+                        // Navigator.pop(context);
+                        Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ListaCliente(),
+                              ),
+                            );
                       } else {
                         debugPrint("erro, favor repetir");
                       }

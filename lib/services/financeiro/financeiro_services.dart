@@ -20,7 +20,6 @@ class FinanceiroServices {
       print('vlrPagamento: ${doc['vlrPagamento']}');
 
       double vlrPagamento = double.parse(doc['vlrPagamento'].toString());
-      // doc['vlrPagamento'] as double; // Get vlrPagamento as double
       total += vlrPagamento; // Add to total
     }
 
@@ -28,8 +27,12 @@ class FinanceiroServices {
   }
 
   Future<List<Financeiro>> allPagamentos(idContrato) async {
-    QuerySnapshot querySnapshot =
-        await _collectionRef.orderBy('dtPagamento').get();
+    // QuerySnapshot querySnapshot =
+    //     await _collectionRef.orderBy('dtPagamento').get();
+    QuerySnapshot querySnapshot = await _collectionRef
+        .where('idContrato', isEqualTo: idContrato)
+        // .orderBy('dtPagamento')
+        .get();
     return querySnapshot.docs.map((doc) {
       return Financeiro(
         id: doc.id,
@@ -45,7 +48,6 @@ class FinanceiroServices {
   Future<bool> save(Financeiro financeiro) async {
     try {
       await _collectionRef.add(financeiro.toJson());
-
       print('Pagamento salvo com sucesso.');
 
       _collectionRef

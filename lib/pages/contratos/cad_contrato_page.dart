@@ -27,13 +27,13 @@ class _CadContratoPageState extends State<CadContratoPage> {
   final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
   final Dialogs _dialogs = Dialogs();
 
-  late List<String> _names = [];
+ 
 
   @override
   void initState() {
     super.initState();
 
-    //_names = _loadNamesFromFirebase();
+    
   }
 
   @override
@@ -226,11 +226,17 @@ class _CadContratoPageState extends State<CadContratoPage> {
                         // ignore: use_build_context_synchronously
                         _dialogs.showSuccessDialog(
                             context, 'cadastro salvo com sucesso!');
-                        _dtInicioContrato.clear();
-                        _dtFinalContrato.clear();
-                        _tempoContrato.clear();
-                        _valorContrato.clear();
-                        _dtVencimento.clear();
+                        // _dtInicioContrato.clear();
+                        // _dtFinalContrato.clear();
+                        // _tempoContrato.clear();
+                        // _valorContrato.clear();
+                        // _dtVencimento.clear();
+                        Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ListaContrato(),
+                              ),
+                            );
                       } else {
                         // ignore: use_build_context_synchronously
                         _dialogs.showErrorDialog(

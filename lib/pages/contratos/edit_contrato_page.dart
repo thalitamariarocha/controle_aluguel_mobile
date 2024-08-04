@@ -12,6 +12,8 @@ import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../cobranca/lista_cobrança_page.dart';
+
 class EditContratoPage extends StatefulWidget {
   final Contrato contratoModel;
   String nomeCasa;
@@ -81,77 +83,11 @@ class _EditContratoPageState extends State<EditContratoPage> {
               child: Text('Cliente: $nomeCliente'),
             ),
 
-            // FutureBuilder<List<String>>(
-            //   future: _userServices.loadNamesFromFirebase()
-            //       as Future<List<String>>?,
-            //   builder:
-            //       (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-            //     if (snapshot.hasError) {
-            //       return const Text('Erro ao carregar os nomes');
-            //     }
-
-            //     if (snapshot.connectionState == ConnectionState.done) {
-            //       return DropdownButton<String>(
-            //         alignment: Alignment.bottomCenter,
-            //         borderRadius: BorderRadius.circular(10),
-            //         value: _userServices.selectedCliente,
-            //         onChanged: (String? newValue) {
-            //           setState(() {
-            //             _userServices.selectedCliente = newValue!;
-            //           });
-            //         },
-            //         items: snapshot.data!.map((String value) {
-            //           return DropdownMenuItem<String>(
-            //             value: value,
-            //             child: Text(value),
-            //           );
-            //         }).toList(),
-            //       );
-            //     }
-
-            //     return const CircularProgressIndicator();
-            //   },
-            // ),
-
-            //------------------------------------------------------------------
-
             Center(
               child: Text(
                 'Casa: $nomeCasa',
               ),
             ),
-
-            // FutureBuilder<List<String>>(
-            //   future: _casaServices.loadNamesFromFirebase()
-            //       as Future<List<String>>?,
-            //   builder:
-            //       (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-            //     if (snapshot.hasError) {
-            //       return const Text('Erro ao carregar os nomes');
-            //     }
-
-            //     if (snapshot.connectionState == ConnectionState.done) {
-            //       return DropdownButton<String>(
-            //         alignment: Alignment.bottomCenter,
-            //         borderRadius: BorderRadius.circular(10),
-            //         value: _casaServices.selectedCasa,
-            //         onChanged: (String? newValue) {
-            //           setState(() {
-            //             _casaServices.selectedCasa = newValue!;
-            //           });
-            //         },
-            //         items: snapshot.data!.map((String value) {
-            //           return DropdownMenuItem<String>(
-            //             value: value,
-            //             child: Text(value),
-            //           );
-            //         }).toList(),
-            //       );
-            //     }
-
-            //     return const CircularProgressIndicator();
-            //   },
-            // ),
 
             //------------------------------------------------------------------
             SizedBox(height: 30),
@@ -243,7 +179,14 @@ class _EditContratoPageState extends State<EditContratoPage> {
                         // _dialogs.showSuccessDialog(
                         //     context, 'atualizado com sucesso!');
 
-                        Navigator.of(context).pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ListaContrato(),
+                          ),
+                        );
+
+                        // Navigator.of(context).pop();
                       } else {
                         // ignore: use_build_context_synchronously
                         _dialogs.showErrorDialog(

@@ -2,6 +2,7 @@ import 'package:controle_aluguel_mobile/models/contrato/contrato.dart';
 import 'package:controle_aluguel_mobile/models/financeiro/financeiro.dart';
 import 'package:controle_aluguel_mobile/pages/financeiro/cad_financeiro_page.dart';
 import 'package:controle_aluguel_mobile/pages/financeiro/edit_financeiro_page.dart';
+import 'package:controle_aluguel_mobile/pages/home.dart';
 import 'package:controle_aluguel_mobile/services/dialogs.dart';
 import 'package:controle_aluguel_mobile/services/financeiro/financeiro_services.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +31,16 @@ class _DetalheFinanceiroPageState extends State<DetalheFinanceiroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          // title: const Text('Detalhes do Financeiro'),
-          ),
+        // title: const Text('Detalhes do Financeiro'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // Em vez de usar Navigator.pop, navegue para a tela desejada
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(5),
         child: Column(

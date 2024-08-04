@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -55,7 +52,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyA2nhNhKWjch4MTY3y8JB5qIgS-BfoM2q8',
-    appId: '1:575373742180:android:64a2e531f2bf9fd1d9cf71',
+    appId: '1:575373742180:android:8f246a49d34133efd9cf71',
     messagingSenderId: '575373742180',
     projectId: 'webback-fb243',
     storageBucket: 'webback-fb243.appspot.com',
@@ -63,19 +60,30 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyClcCHExCwHDSinFNz75Vs4IgYHPw1u6gc',
-    appId: '1:575373742180:ios:101e587f6fb67f74d9cf71',
+    appId: '1:575373742180:ios:a553707804de0a0cd9cf71',
     messagingSenderId: '575373742180',
     projectId: 'webback-fb243',
     storageBucket: 'webback-fb243.appspot.com',
-    iosBundleId: 'com.example.controleAluguel',
+    iosBundleId: 'com.example.controleAluguelMobile',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyClcCHExCwHDSinFNz75Vs4IgYHPw1u6gc',
-    appId: '1:575373742180:ios:835cec33ce8d7d70d9cf71',
+    appId: '1:575373742180:ios:a553707804de0a0cd9cf71',
     messagingSenderId: '575373742180',
     projectId: 'webback-fb243',
     storageBucket: 'webback-fb243.appspot.com',
-    iosBundleId: 'com.example.controleAluguel.RunnerTests',
+    iosBundleId: 'com.example.controleAluguelMobile',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyD84IB-XNAB23-23LMOy6wyA1TEyCOrIJk',
+    appId: '1:575373742180:web:934046593ede2604d9cf71',
+    messagingSenderId: '575373742180',
+    projectId: 'webback-fb243',
+    authDomain: 'webback-fb243.firebaseapp.com',
+    storageBucket: 'webback-fb243.appspot.com',
+    measurementId: 'G-ZZYTYNL2QH',
+  );
+
 }

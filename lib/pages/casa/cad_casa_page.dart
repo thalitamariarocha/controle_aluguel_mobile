@@ -1,4 +1,5 @@
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:controle_aluguel_mobile/pages/casa/lista_casa_page.dart';
 import 'package:controle_aluguel_mobile/pages/login/login_page.dart';
 import 'package:controle_aluguel_mobile/services/casa/casa_services.dart';
 import 'package:controle_aluguel_mobile/services/dialogs.dart';
@@ -144,8 +145,14 @@ class _CadCasaPageState extends State<CadCasaPage> {
                         _casaServices.webImage,
                       )) {
                         _dialogs.showSuccessDialog(context, "cadastro salvo!");
-                        _endereco.clear();
-                        _nome.clear();
+                        // _endereco.clear();
+                        // _nome.clear();
+                        Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ListaCasa(),
+                              ),
+                            );
                       } else {
                         debugPrint("erro, favor repetir");
                       }

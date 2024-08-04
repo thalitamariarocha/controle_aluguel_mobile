@@ -1,4 +1,5 @@
 import 'package:controle_aluguel_mobile/models/usuarios/cliente.dart';
+import 'package:controle_aluguel_mobile/pages/clientes/lista_cliente_page.dart';
 import 'package:controle_aluguel_mobile/services/dialogs.dart';
 import 'package:controle_aluguel_mobile/services/users/user_services.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +8,8 @@ import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 
 class EditClientPage extends StatefulWidget {
-
   final Cliente cliente;
-  
+
   const EditClientPage({super.key, required this.cliente});
 
   @override
@@ -17,7 +17,6 @@ class EditClientPage extends StatefulWidget {
 }
 
 class _EditClientPageState extends State<EditClientPage> {
-
   final TextEditingController _email = TextEditingController();
   final TextEditingController _telefone = TextEditingController();
   final TextEditingController _dtnascimento = TextEditingController();
@@ -26,9 +25,7 @@ class _EditClientPageState extends State<EditClientPage> {
   UserServices _userServices = UserServices();
   Dialogs _dialogs = Dialogs();
 
-
   late String urlImg;
-
 
   @override
   void initState() {
@@ -134,19 +131,23 @@ class _EditClientPageState extends State<EditClientPage> {
                       return;
                     }
 
-                   
-                      if (await _userServices.cadastrarCliente(
-                        _nome.text,
-                        _cpf.text,
-                        _dtnascimento.text,
-                        _telefone.text,
-                        _email.text,
-                      )) {
-                        Navigator.pop(context);
-                      } else {
-                        debugPrint("erro, favor repetir");
-                      }
-                    
+                    if (await _userServices.cadastrarCliente(
+                      _nome.text,
+                      _cpf.text,
+                      _dtnascimento.text,
+                      _telefone.text,
+                      _email.text,
+                    )) {
+                      // Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ListaCliente(),
+                        ),
+                      );
+                    } else {
+                      debugPrint("erro, favor repetir");
+                    }
                   }, //chamada do signup do user_services (controller)
                   child: const Text(
                     "Salvar",

@@ -7,7 +7,7 @@ import 'package:controle_aluguel_mobile/services/dialogs.dart';
 import 'package:controle_aluguel_mobile/services/users/user_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:hive/hive.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -21,7 +21,52 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _password = TextEditingController();
   UserServices _userServices = UserServices();
   Dialogs _dialogs = Dialogs();
-   bool _rememberMe = false;
+  bool _rememberMe = false;
+
+  //----------------------------------
+  @override
+  void initState() {
+    super.initState();
+    _loadLoginInfo();
+  }
+
+  void _loadLoginInfo() async {
+    var box = Hive.box('loginBox');
+    print('login - ${box.get('rememberMe').toString()}');
+    print('email - ${box.get('email').toString()}');
+    print('senha - ${box.get('senha').toString()}');
+
+    if (box.get('rememberMe').toString() == 'true') {
+      print('login - hive');
+      setState(() {
+        _email.text = box.get('username');
+        _password.text = box.get('password');
+        _rememberMe = true;
+      });
+    }
+  }
+
+  void _onRememberMeChanged(bool? value) {
+    setState(() {
+      _rememberMe = value ?? false;
+    });
+    //debugPrint(Hive.box('loginBox').get('email'));
+  }
+
+  void _login(String email, String password, String rememberMe) {
+    var box = Hive.box('loginBox');
+    if (_rememberMe == false) {
+      box.delete('username');
+      box.delete('password');
+      box.delete('rememberMe');
+    } else {
+      box.put('username', email);
+      box.put('password', password);
+      box.put('rememberMe', rememberMe);
+    }
+  }
+
+  //----------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +119,8 @@ class _LoginPageState extends State<LoginPage> {
                     if (await _userServices.signIn(
                             _email.text, _password.text) ==
                         true) {
+                      _login(
+                          _email.text, _password.text, _rememberMe.toString());
                       final user = FirebaseAuth.instance.currentUser;
                       final userData = await FirebaseFirestore.instance
                           .collection('usuario')
@@ -100,7 +147,15 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                 ),
-                
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _rememberMe,
+                      onChanged: _onRememberMeChanged,
+                    ),
+                    const Text('Lembrar Login'),
+                  ],
+                ),
                 const SizedBox(
                   height: 20,
                 ),

@@ -1,4 +1,5 @@
 import 'package:controle_aluguel_mobile/models/financeiro/financeiro.dart';
+import 'package:controle_aluguel_mobile/pages/financeiro/lista_financeiro_page.dart';
 import 'package:controle_aluguel_mobile/services/contrato/contrato_services.dart';
 import 'package:controle_aluguel_mobile/services/contrato/contrato_services.dart';
 import 'package:controle_aluguel_mobile/services/dialogs.dart';
@@ -114,7 +115,13 @@ class _EditFinanceiroPageState extends State<EditFinanceiroPage> {
                             context, 'Pagamento atualizado com sucesso!');
                         onpressed:
                         () {
-                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ListaFinanceiro(),
+                              ),
+                            );
+                          //Navigator.pop(context);
                         };
                       } else {
                         _dialogs.showErrorDialog(
